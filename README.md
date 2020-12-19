@@ -1,5 +1,5 @@
-#Calendar Application <br>
-###Written in C <br>
+# Calendar Application <br>
+### Written in C <br>
 <br>
 <br>
 This executable is not cross-platform,
