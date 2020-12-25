@@ -10,20 +10,19 @@
 #include <stdlib.h>
 
 #define ISLEAP(x) ((x) % 400 == 0 || ((x) % 4 == 0 && (x) % 100 != 0))
-#define clearScreen() system ("clear");
 typedef struct {
 	int year;
 	int month;
 } Date;
 
 typedef enum {
-	RED,
+	RED = 31,
 	GREEN,
 	YELLOW,
 	BLUE,
 	MAGENTA,
 	CYAN,
-	DEFAULT,
+	DEFAULT = 0,
 } Colours;
 
 void printMonth (Date);
@@ -36,21 +35,29 @@ void setColour (Colours);
 
 int main (int argc, char *argv[])
 {
-	int option = 1;
+	int option = -1;
 	Date date;
 
 	while (1) {
-		clearScreen ();
 		printf ("Enter:\n"
 		        "  1 to print a particular month\n");
 		scanf ("%d", &option);
+		printf ("You chose: %d\n", option);
+		clearBuffer();
 
 		switch (option) {
+			default:
+				setColour (RED);
+				fputs ("Invalid Option\n", stdout);
+				setColour (DEFAULT);
+				break;
 			case 1:
-				clearScreen ();
+				setColour (YELLOW);
 				printf ("Enter the month \n"
 				        "ex: Jan 1600 is written as 1/1600\n");
+				setColour (DEFAULT);
 				scanf ("%d/%d", &date.month, &date.year);
+				clearBuffer();
 				if (date.year < 1600) {
 					setColour (RED);
 					printf ("No record before Jan 1600\n");
@@ -65,12 +72,8 @@ int main (int argc, char *argv[])
 				}
 				printMonth (date);
 				break;
-			defualt:
-				fputs ("Invalid Option", stderr);
-				break;
 		}
-		getchar();
-		clearBuffer ();
+		clearBuffer (); //to handle any other letters the user may enter
 	}
 }
 
@@ -179,17 +182,7 @@ char* getMonthName (int month)
 
 void setColour (Colours colour)
 {
-	switch (colour) {
-		case RED: printf ("\033[1;31m"); break;
-		case GREEN: printf ("\033[1;32m"); break;
-		case YELLOW: printf ("\033[1;33m"); break;
-		case BLUE: printf ("\033[1;34m"); break;
-		case MAGENTA: printf ("\033[1;35m"); break;
-		case CYAN: printf ("\033[1;36m"); break;
-		case DEFAULT: printf ("\033[0;0m"); break;
-		default: break;
-	}
-	return;
+	printf ("\033[1;%dm", colour);	
 }
 
 void clearBuffer (void)
