@@ -17,5 +17,6 @@
 	int getFirstDayOfMonth (Date);
 	int getDaysInMonth (int, _Bool);
 	char* getMonthName (int);
+	void printMonth (Date);
 
 #endif	//DATE_FUNCTIONS_H

@@ -7,23 +7,9 @@
 	Project started by Koustubh Srivastava
 */
 #include <stdio.h>
-#include <stdlib.h>
 #include "date.h"
+#include "utils.h"
 
-typedef enum {
-	RED = 31,
-	GREEN,
-	YELLOW,
-	BLUE,
-	MAGENTA,
-	CYAN,
-	DEFAULT = 0,
-} Colours;
-
-void printMonth (Date);
-void clearBuffer (void);
-
-void setColour (Colours);
 
 int main (int argc, char *argv[])
 {
@@ -31,11 +17,13 @@ int main (int argc, char *argv[])
 	Date date;
 
 	while (1) {
+		setColour (BLUE);
 		printf ("Enter:\n"
-		        "  1 to print a particular month\n");
+		        "  1 to print a month's calendar\n"
+		setColour (DEFAULT);
 		scanf ("%d", &option);
-		printf ("You chose: %d\n", option);
-		clearBuffer();
+		setColour (GREEN);
+		printf ("You chose: %d\n\n", option);
 
 		switch (option) {
 			case 1:
@@ -61,7 +49,7 @@ int main (int argc, char *argv[])
 				break;
 			default:
 				setColour (RED);
-				fputs ("Invalid Option\n", stdout);
+				fputs ("Invalid Option\n", stderr);
 				setColour (DEFAULT);
 				break;
 		}
