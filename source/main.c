@@ -19,7 +19,7 @@ int main (int argc, char *argv[])
 	while (1) {
 		setColour (BLUE);
 		printf ("Enter:\n"
-		        "  1 to print a month's calendar\n"
+		        "  1 to print a month's calendar\n");
 		setColour (DEFAULT);
 		scanf ("%d", &option);
 		setColour (GREEN);
