@@ -3,8 +3,8 @@
 	calculation of dates.
 */
 #include <stdio.h>
-#include "date.h"
 #include "utils.h"
+#include "date.h"
 
 int getFirstDayOfMonth (Date date)
 {
@@ -79,33 +79,5 @@ char* getMonthName (int month)
 		case 12: return "Dec";
 	}
 	return NULL;
-}
-
-void printMonth (Date date)
-{
-	printf ("\n\n");
-	int firstDay = getFirstDayOfMonth (date);
-	int daysInMonth = getDaysInMonth (date.month, ISLEAP (date.year));
-	
-	if (firstDay == -1) {
-		return;
-	}
-	setColour (BLUE);
-	printf ("       %s %4d\n", getMonthName (date.month), date.year);
-	setColour (RED);
-	printf ("  M  T  W  T  F  S  S\n");
-	setColour (DEFAULT);
-
-	for (int i = 0; i < firstDay; i++) {
-		printf ("   ");
-	}
-	for (int i = 1; i <= daysInMonth; i++) {
-		printf ("%3d", i);
-		if ((i + firstDay) % 7 == 0) {
-			printf ("\n");
-		}
-	}
-	printf ("\n\n");
-	return;
 }
 

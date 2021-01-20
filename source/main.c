@@ -7,32 +7,42 @@
 	Project started by Koustubh Srivastava
 */
 #include <stdio.h>
+#include <stdlib.h>
 #include "date.h"
 #include "utils.h"
-
+#include "outputs.h"
 
 int main (int argc, char *argv[])
 {
-	int option = -1;
 	Date date;
+	Point origin = {1, 1};
 
 	while (1) {
-		setColour (BLUE);
+		int option = -1;
+		setColour (CYAN);
 		printf ("Enter:\n"
-		        "  1 to print a month's calendar\n");
+			"  0 to exit\n"
+			"  1 to print a month's calendar\n"
+			"  2 to print a year's calendar\n");
 		setColour (DEFAULT);
 		scanf ("%d", &option);
-		setColour (GREEN);
-		printf ("You chose: %d\n\n", option);
+		clearBuffer ();
 
 		switch (option) {
+			case 0:
+				setColour (YELLOW);
+				printf ("Thanks for using this application\n");
+				exit (0);
 			case 1:
+				date.month = -1;
+				date.year = 1599;
 				setColour (YELLOW);
 				printf ("Enter the month \n"
-				        "ex: Jan 1600 is written as 1/1600\n");
+					"[Jan 1600 is written as 1/1600]\n");
 				setColour (DEFAULT);
 				scanf ("%d/%d", &date.month, &date.year);
-				clearBuffer();
+				clearBuffer ();
+
 				if (date.year < 1600) {
 					setColour (RED);
 					printf ("No record before Jan 1600\n");
@@ -45,26 +55,43 @@ int main (int argc, char *argv[])
 					setColour (DEFAULT);
 					break;
 				}
-				printMonth (date);
+				system ("clear");
+				printMonth (date, origin);
+				break;
+			case 2:
+			/*
+				setColour (RED);
+				printf ("Cannot use feature: under development\n");
+				setColour (DEFAULT);
+				break;
+			*/
+				date.month = 1;
+				date.year = 1599;
+
+				setColour (YELLOW);
+				printf ("Enter the year\n");
+				setColour (DEFAULT);
+
+				scanf ("%d", &date.year);
+				clearBuffer ();
+				
+				if (date.year < 1600) {
+					setColour (RED);
+					printf ("No Record Before 1600\n");
+					setColour (DEFAULT);
+
+					break;
+				}
+
+				printYear (date);
+				
 				break;
 			default:
 				setColour (RED);
-				fputs ("Invalid Option\n", stderr);
+				printf ("Invalid Option\n");
 				setColour (DEFAULT);
 				break;
 		}
-		clearBuffer (); //to handle any other letters the user may enter
 	}
-}
-
-void setColour (Colours colour)
-{
-	printf ("\033[1;%dm", colour);	
-}
-
-void clearBuffer (void)
-{
-	char dump;
-	while ((dump = getchar ()) != '\n' && dump != EOF)
-		;
+	return 0;
 }
