@@ -1,8 +1,8 @@
 CFLAGS=-Wall
-COMPILE_FILES=main.c date.c utils.c outputs.c
+COMPILE_FILES=main.o date.o utils.o outputs.o
 
 all: main.o outputs.o date.o utils.o
-	gcc $(CFLAGS) $(COMPILE_FILES) -o Calendar
+	gcc $(CFLAGS) $(COMPILE_FILES) -o ../Calendar
 
 main.o: main.c
 	gcc -Wall -c main.c
@@ -18,4 +18,3 @@ utils.o: utils.c utils.h
 
 clean:
 	rm *.o
-	rm Calendar
