@@ -12,86 +12,97 @@
 #include "utils.h"
 #include "outputs.h"
 
+void printMenu (void);
+int getOption (void);
+void handleMenu (int, Date);
+
 int main (int argc, char *argv[])
 {
 	Date date;
-	Point origin = {1, 1};
+	int option;
 
 	while (1) {
-		int option = -1;
-		setColour (CYAN);
-		printf ("Enter:\n"
-			"  0 to exit\n"
-			"  1 to print a month's calendar\n"
-			"  2 to print a year's calendar\n");
-		setColour (DEFAULT);
-		scanf ("%d", &option);
-		clearBuffer ();
+		date.year = 1599;
+		date.month = -1;
+		
+		printMenu ();
+		option = getOption ();
+		if (option < 0) {
+			setColour (RED);
+			printf ("Invalid Option\n");
+			setColour (DEFAULT);
 
-		switch (option) {
-			case 0:
-				setColour (YELLOW);
-				printf ("Thanks for using this application\n");
-				exit (0);
-			case 1:
-				date.month = -1;
-				date.year = 1599;
-				setColour (YELLOW);
-				printf ("Enter the month \n"
-					"[Jan 1600 is written as 1/1600]\n");
-				setColour (DEFAULT);
-				scanf ("%d/%d", &date.month, &date.year);
-				clearBuffer ();
-
-				if (date.year < 1600) {
-					setColour (RED);
-					printf ("No record before Jan 1600\n");
-					setColour (DEFAULT);
-					break;
-				}
-				if (date.month < 1 || date.month > 12) {
-					setColour (RED);
-					printf ("Invalid Month\n");
-					setColour (DEFAULT);
-					break;
-				}
-				system ("clear");
-				printMonth (date, origin);
-				break;
-			case 2:
-			/*
-				setColour (RED);
-				printf ("Cannot use feature: under development\n");
-				setColour (DEFAULT);
-				break;
-			*/
-				date.month = 1;
-				date.year = 1599;
-
-				setColour (YELLOW);
-				printf ("Enter the year\n");
-				setColour (DEFAULT);
-
-				scanf ("%d", &date.year);
-				clearBuffer ();
-				
-				if (date.year < 1600) {
-					setColour (RED);
-					printf ("No Record Before 1600\n");
-					setColour (DEFAULT);
-
-					break;
-				}
-
-				printYear (date);
-				
-				break;
-			default:
-				setColour (RED);
-				printf ("Invalid Option\n");
-				setColour (DEFAULT);
-				break;
+			continue;
 		}
+		setColour (YELLOW);
+		printf ("Enter the month and year\n\n"
+			"[Jan 1600 as 1/1600]\n");
+		scanf ("%d/%d", &date.month, &date.year);
+		clearBuffer ();
+		setColour (DEFAULT);
+
+		setColour (RED);
+		if (date.year < 1600) {
+			printf ("No record before 1600\n");
+			continue;
+		} else if (date.month > 12 || date.month < 1) {
+			printf ("Invalid Date\n");
+			continue;
+		}
+		setColour (DEFAULT);
+		handleMenu (option, date);
 	}
 	return 0;
+}
+
+void printMenu (void)
+{
+	setColour (CYAN);
+	printf ("Enter:\n"
+		"  0 to exit\n"
+		"  1 to print a month's calendar\n"
+		"  2 to print a year's calendar\n"
+		"  3 to add a reminder (under development)\n");
+	setColour (DEFAULT);
+}
+
+int getOption (void)
+{
+	int option;
+	scanf ("%d", &option);
+	clearBuffer ();
+
+	if (option >= 0 && option <= 3) {
+		return option;
+	}
+	return -1;
+}
+
+void handleMenu (int option, Date date)
+{
+	Point origin = {0, 0};
+	switch (option) {
+		case 0:
+			setColour (GREEN);
+			printf ("Thanks for Using this Application\n");
+			setColour (DEFAULT);
+			exit (0);
+		case 1:
+			system ("clear");
+			printMonth (date, origin);
+			break;
+		case 2:
+			printYear (date);
+			break;
+		case 3:
+			setColour (RED);
+			printf ("Feature under development\n");
+			setColour (DEFAULT);
+			break;
+		default:
+			setColour (RED);
+			printf ("Invalid Option\n");
+			setColour (DEFAULT);
+			break;
+	}
 }
