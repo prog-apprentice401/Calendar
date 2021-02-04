@@ -17,4 +17,4 @@ utils.o: utils.c utils.h
 	gcc -Wall -c utils.c
 
 clean:
-	rm *.o
+	rm *.o ../Calendar
