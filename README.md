@@ -4,7 +4,6 @@
 <br>
 The source code is present in the repo, <br>
 so it can be downloadedand recompiled.<br>
-<br>
 Any issues will be REALLY helpful<br>
 
 ![](https://github.com/prog-apprentice401/Calendar/blob/master/screenshots/shot1.png?raw=true)
