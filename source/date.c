@@ -6,15 +6,16 @@
 #include "utils.h"
 #include "date.h"
 
+//function: calculate first day , Mon = 0, Sun = 7
+//accepts : month (member of Date) to calculate for
+//returns : first day of month, Mon = 0 Sun = 7
 int getFirstDayOfMonth (Date date)
 {
 	if (date.year < 1600) {
 		fputs ("\nNo record before 1600\n", stderr);
 		return -1;
 	}
-	
 	int firstDay = 5;	//first Jan 1600 was Saturday
-
 	for (int i = 1600; i < date.year - date.year % 100; i+= 100) {	//first calculate day on first Jan of year
 		if (ISLEAP (i)) {
 			firstDay += 6;
@@ -23,7 +24,6 @@ int getFirstDayOfMonth (Date date)
 		}
 		firstDay %= 7;
 	}
-
 	for (int i = date.year - date.year % 100; i < date.year; i++) {
 		if (ISLEAP (i)) {
 			firstDay += 2;
@@ -32,16 +32,16 @@ int getFirstDayOfMonth (Date date)
 		}
 		firstDay %= 7;
 	}
-
 	for (int i = 1; i < date.month; i++) {	//caluclate first day of given month
 		firstDay += getDaysInMonth (i, ISLEAP (date.year));
 		firstDay %= 7;
 	}
-
 	return firstDay;
 }
 
-
+//function: gets number of days in a month
+//accepts : month, _Bool value of leap status
+//returns : days in month
 int getDaysInMonth (int month, _Bool isLeapYear)
 {
 	switch (month) {
@@ -61,7 +61,9 @@ int getDaysInMonth (int month, _Bool isLeapYear)
 	return 0;
 }
 
-
+//function: gets name of a month
+//accepts : month number
+//returns : month name as string
 char* getMonthName (int month)
 {
 	switch (month) {

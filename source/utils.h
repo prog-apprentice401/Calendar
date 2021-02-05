@@ -5,13 +5,15 @@
 #ifndef UTILS_H
 	#define UTILS_H
 
-	#define CURSOR_UP(y)	(printf ("\033[%dA", (y)))
-	#define CURSOR_DOWN(y)	(printf ("\033[%dB", (y)))
-	#define CURSOR_RIGHT(x)	(printf ("\033[%dC", (x)))
-	#define CURSOR_LEFT(x)	(printf ("\033[%dD", (x)))
+	#define CURSOR_UP(r)	(printf ("\033[%dA", (r)))
+	#define CURSOR_DOWN(r)	(printf ("\033[%dB", (r)))
+	#define CURSOR_RIGHT(c)	(printf ("\033[%dC", (c)))
+	#define CURSOR_LEFT(c)	(printf ("\033[%dD", (c)))
+	
+	//macro to set cursor position: 
+	#define GOTORC(r,c) (printf ("\033[%d;%dH", (r), (c)))
 
-	#define GOTOXY(x,y) (printf ("\033[%d;%dH", (x), (y)))
-
+	//enumeration containing ASCII CSI codes
 	typedef enum {
 		RED = 31,
 		GREEN = 32,
@@ -21,7 +23,7 @@
 		CYAN = 36,
 		DEFAULT = 0,
 	} Colours;
-
+	
 	typedef struct {
 		int x;
 		int y;

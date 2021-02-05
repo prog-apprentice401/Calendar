@@ -12,21 +12,22 @@
 #include "utils.h"
 #include "outputs.h"
 
-void printMenu (void);
-int getOption (void);
+int printMenu (void);
+int getOption (int);
 void handleMenu (int, Date);
 
 int main (int argc, char *argv[])
 {
 	Date date;
 	int option;
+	int numOfOptions;
 
 	while (1) {
 		date.year = 1599;
 		date.month = -1;
 		
-		printMenu ();
-		option = getOption ();
+		numOfOptions = printMenu ();
+		option = getOption (numOfOptions);
 		if (option < 0) {
 			setColour (RED);
 			printf ("Invalid Option\n");
@@ -55,8 +56,13 @@ int main (int argc, char *argv[])
 	return 0;
 }
 
-void printMenu (void)
+//function: printfs option menu
+//accepts : void
+//returns : number of options
+int printMenu (void)
 {
+	int numOfOptions = 4;
+
 	setColour (CYAN);
 	printf ("Enter:\n"
 		"  0 to exit\n"
@@ -64,20 +70,28 @@ void printMenu (void)
 		"  2 to print a year's calendar\n"
 		"  3 to add a reminder (under development)\n");
 	setColour (DEFAULT);
+
+	return numOfOptions;
 }
 
-int getOption (void)
+//function: gets a VALID option from the user
+//accepts : number of options the user gets
+//returns : integer b/w 0 and numOfOptions, -1 on invalid input
+int getOption (int numOfOptions)
 {
 	int option;
 	scanf ("%d", &option);
 	clearBuffer ();
-
-	if (option >= 0 && option <= 3) {
+	
+	if (option >= 0 && option < numOfOptions) {
 		return option;
 	}
 	return -1;
 }
 
+//function: calls appropriate functions based on option
+//accepts : option chosen, date to calculate upon
+//returns : void
 void handleMenu (int option, Date date)
 {
 	Point origin = {0, 0};
