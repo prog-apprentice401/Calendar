@@ -24,28 +24,38 @@ void printMonth (Date date, const Point startOn)
 	}
 
 	setColour (BLUE);
-	printf ("       %s %4d", getMonthName (date.month), date.year);
-	GOTORC (cursor.x += 1, cursor.y);
+	printf ("       %s %4lu", getMonthName (date.month), date.year);
+	
+	CURSOR_DOWN (1);
+	cursor.x += 1;
+	CURSOR_LEFT (15);
+
 	setColour (RED);
 	printf ("  M  T  W  T  F  S  S");
 
-	GOTORC (cursor.x += 1, cursor.y);
+	CURSOR_DOWN (1);
+	cursor.x += 1;
+	CURSOR_LEFT (21);
 
 	setColour (DEFAULT);
 
 	for (int i = 0; i < firstDay; i++) {
 		printf ("   ");
 	}
-	for (int i = 1; i <= daysInMonth; i++) {
+	for (unsigned char i = 1; i <= daysInMonth; i++) {
 		printf ("%3d", i);
 		if ((i + firstDay) % 7 == 0) {
-			GOTORC (cursor.x += 1, cursor.y);
+			cursor.x += 1;
+			CURSOR_DOWN (1);
+			CURSOR_LEFT (21);
 		}
 	}
-	GOTORC (cursor.x += 1, cursor.y);
+	cursor.x += 1;
+	GOTORC (cursor.x, cursor.y);
 
 	if (cursor.x - startOn.x <= 9) {
-		GOTORC (cursor.x += 1, cursor.y);
+		cursor.x += 1;
+		GOTORC (cursor.x, cursor.y);
 	}
 }
 
@@ -65,7 +75,8 @@ void printYear (Date date)
 		GOTORC (cursor.x, cursor.y);
 
 		if (date.month % 4 == 0) {
-			GOTORC (cursor.x += 8, cursor.y = 1);
+			cursor.x += 8;
+			GOTORC (cursor.x, cursor.y = 1);
 		}
 	}
 }

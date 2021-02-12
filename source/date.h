@@ -5,14 +5,18 @@
 
 #ifndef DATE_H
 	#define DATE_H
-
-
 	#define ISLEAP(x) ((x) % 400 == 0 || ((x) % 4 == 0 && (x) % 100 != 0))
 
 	typedef struct {
-		int year;
-		int month;
+		unsigned long int year;
+		unsigned short int month;
+		unsigned short int day;
 	} Date;
+
+	typedef struct {
+		_Bool month;
+		_Bool day;
+	} Requirements;
 	
 	int getFirstDayOfMonth (Date);
 	int getDaysInMonth (int, _Bool);

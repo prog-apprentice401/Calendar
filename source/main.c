@@ -15,6 +15,9 @@
 int printMenu (void);
 int getOption (int);
 void handleMenu (int, Date);
+Date getDate (int);
+
+Requirements G_isRequired;   //struct to check requirement of date fields
 
 int main (int argc, char *argv[])
 {
@@ -23,8 +26,8 @@ int main (int argc, char *argv[])
 	int numOfOptions;
 
 	while (1) {
-		date.year = 1599;
-		date.month = -1;
+		G_isRequired = (Requirements) {0};
+		date = (Date) {0};
 		
 		numOfOptions = printMenu ();
 		option = getOption (numOfOptions);
@@ -35,18 +38,13 @@ int main (int argc, char *argv[])
 
 			continue;
 		}
-		setColour (YELLOW);
-		printf ("Enter the month and year\n\n"
-			"[Jan 1600 as 1/1600]\n");
-		scanf ("%d/%d", &date.month, &date.year);
-		clearBuffer ();
-		setColour (DEFAULT);
+		date = getDate (option);
 
 		setColour (RED);
 		if (date.year < 1600) {
 			printf ("No record before 1600\n");
 			continue;
-		} else if (date.month > 12 || date.month < 1) {
+		} else if ((date.month > 12 || date.month < 1) && G_isRequired.month) {
 			printf ("Invalid Date\n");
 			continue;
 		}
@@ -56,7 +54,7 @@ int main (int argc, char *argv[])
 	return 0;
 }
 
-//function: printfs option menu
+//function: prints option menu
 //accepts : void
 //returns : number of options
 int printMenu (void)
@@ -66,8 +64,8 @@ int printMenu (void)
 	setColour (CYAN);
 	printf ("Enter:\n"
 		"  0 to exit\n"
-		"  1 to print a month's calendar\n"
-		"  2 to print a year's calendar\n"
+		"  1 to print a year's calendar\n"
+		"  2 to print a month's calendar\n"
 		"  3 to add a reminder (under development)\n");
 	setColour (DEFAULT);
 
@@ -79,13 +77,20 @@ int printMenu (void)
 //returns : integer b/w 0 and numOfOptions, -1 on invalid input
 int getOption (int numOfOptions)
 {
-	int option;
+	int option = -1;
 	scanf ("%d", &option);
 	clearBuffer ();
 	
 	if (option >= 0 && option < numOfOptions) {
+		if (option >= 2) {
+			if (option >= 3) {
+				G_isRequired.day = 1;
+			}
+			G_isRequired.month = 1;
+		}
 		return option;
 	}
+
 	return -1;
 }
 
@@ -102,11 +107,11 @@ void handleMenu (int option, Date date)
 			setColour (DEFAULT);
 			exit (0);
 		case 1:
-			system ("clear");
-			printMonth (date, origin);
+			printYear (date);
 			break;
 		case 2:
-			printYear (date);
+			system ("clear");
+			printMonth (date, origin);
 			break;
 		case 3:
 			setColour (RED);
@@ -119,4 +124,29 @@ void handleMenu (int option, Date date)
 			setColour (DEFAULT);
 			break;
 	}
+}
+
+Date getDate (int option)
+{
+	Date date = {0};
+
+	setColour (YELLOW);
+	printf ("Enter the year\n");
+	scanf ("%lu", &date.year);
+	clearBuffer ();
+	
+	if (G_isRequired.month) {
+		printf ("Enter the month\n");
+		scanf ("%hu", &date.month);
+		clearBuffer ();
+	}
+	
+	if (G_isRequired.day) {
+		printf ("Enter the day\n");
+		scanf ("%hu", &date.day);
+		clearBuffer ();
+	}
+	setColour (DEFAULT);
+
+	return date;
 }
