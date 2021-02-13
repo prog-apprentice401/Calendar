@@ -19,7 +19,8 @@
 	} Requirements;
 	
 	int getFirstDayOfMonth (Date);
-	int getDaysInMonth (int, _Bool);
+	int getDaysInMonth (unsigned short int, unsigned long int);
 	char* getMonthName (int);
+	int dateIsLessThan (Date, Date);
 
 #endif	//DATE_FUNCTIONS_H

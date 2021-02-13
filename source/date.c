@@ -11,10 +11,6 @@
 //returns : first day of month, Mon = 0 Sun = 7
 int getFirstDayOfMonth (Date date)
 {
-	if (date.year < 1600) {
-		fputs ("\nNo record before 1600\n", stderr);
-		return -1;
-	}
 	int firstDay = 5;	//first Jan 1600 was Saturday
 	for (int i = 1600; i < date.year - date.year % 100; i+= 100) {	//first calculate day on first Jan of year
 		if (ISLEAP (i)) {
@@ -33,7 +29,7 @@ int getFirstDayOfMonth (Date date)
 		firstDay %= 7;
 	}
 	for (int i = 1; i < date.month; i++) {	//caluclate first day of given month
-		firstDay += getDaysInMonth (i, ISLEAP (date.year));
+		firstDay += getDaysInMonth (i, date.year);
 		firstDay %= 7;
 	}
 	return firstDay;
@@ -42,11 +38,11 @@ int getFirstDayOfMonth (Date date)
 //function: gets number of days in a month
 //accepts : month, _Bool value of leap status
 //returns : days in month
-int getDaysInMonth (int month, _Bool isLeapYear)
+int getDaysInMonth (unsigned short int month, unsigned long int year)
 {
 	switch (month) {
 		case 1 : return 31;
-		case 2 : return (isLeapYear) ? 29 : 28;
+		case 2 : return (ISLEAP (year)) ? 29 : 28;
 		case 3 : return 31;
 		case 4 : return 30;
 		case 5 : return 31;
@@ -83,3 +79,18 @@ char* getMonthName (int month)
 	return NULL;
 }
 
+//function: checks if date1 comes before date2
+//accepts : first date and seconds date
+//returns : 1 if date1 is less or equal to date2, else 0
+int dateIsLessThan (Date date1, Date date2)
+{
+	if (date1.year <= date2.year) {
+		return 1;
+	} else if (date1.month <= date2.month) {
+		return 1;
+	} else if (date1.day <= date2.day) {
+		return 1;
+	} else {
+		return 0;
+	}
+}

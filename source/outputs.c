@@ -17,7 +17,7 @@ void printMonth (Date date, const Point startOn)
 	Point cursor = startOn;
 
 	int firstDay = getFirstDayOfMonth (date);
-	int daysInMonth = getDaysInMonth (date.month, ISLEAP (date.year));
+	int daysInMonth = getDaysInMonth (date.month, date.year);
 	
 	if (firstDay == -1) {
 		return;
