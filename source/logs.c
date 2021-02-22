@@ -27,7 +27,7 @@ void addNewEvent (Date date)
 	printf ("\n\nEnter the reminder (max 100 characters)\n");
 	charactersRead = getline ((char**) &input.message, (size_t*) &maxMessageLength, stdin);
 	
-	if (charactersRead >= 9) {
+	if (charactersRead >= sizeof (input.message)) {
 		setColour (CYAN);
 		printf ("Note: All characters may not have been read\n");
 		setColour (DEFAULT);

@@ -13,23 +13,20 @@
 #include "utils.h"
 #include "outputs.h"
 
-int printMenu (void);
-int getOption (int);
+void printMenu (void);
+void getOption (int *);
 void handleMenu (int);
-Date getDate (void);
-
-Requirements G_isRequired;   //struct to check requirement of date fields
+void getYear (Date *);
+void getMonth (Date *);
+void getDay (Date *);
 
 int main (int argc, char *argv[])
 {
 	int option;
-	int numOfOptions;
 
 	while (1) {
-		G_isRequired = (Requirements) {0};
-		
-		numOfOptions = printMenu ();
-		option = getOption (numOfOptions);
+		printMenu ();
+		getOption (&option);
 		if (option < 0) {
 			setColour (RED);
 			printf ("Invalid Option\n");
@@ -45,11 +42,9 @@ int main (int argc, char *argv[])
 
 //function: prints option menu
 //accepts : void
-//returns : number of options
-int printMenu (void)
+//returns : void
+void printMenu (void)
 {
-	int numOfOptions = 4;
-
 	setColour (CYAN);
 	printf ("Enter:\n"
 		"  0 to exit\n"
@@ -57,31 +52,28 @@ int printMenu (void)
 		"  2 to print a month's calendar\n"
 		"  3 to add a reminder (under development)\n");
 	setColour (DEFAULT);
-
-	return numOfOptions;
 }
 
 //function: gets a VALID option from the user
 //accepts : number of options the user gets
 //returns : integer b/w 0 and numOfOptions, -1 on invalid input
-int getOption (int numOfOptions)
+void getOption (int * optionPtr)
 {
-	int option = -1;
-
-	scanf ("%d", &option);
-	clearBuffer ();
-
-	if (option >= 0 && option < numOfOptions) {
-		if (option >= 2) {
-			if (option >= 3) {
-				G_isRequired.day = 1;
-			}
-			G_isRequired.month = 1;
-		}
-		return option;
+	if (optionPtr == NULL) {
+		return;
 	}
 
-	return -1;
+	while (1) {
+		scanf ("%d", optionPtr);
+		clearBuffer ();
+
+		if (*optionPtr < 0 || *optionPtr > 3) {
+			setColour (RED);
+			printf ("Invalid Option\n");
+			continue;
+		}
+		break;
+	}
 }
 
 //function: calls appropriate functions based on option
@@ -91,21 +83,22 @@ void handleMenu (int option)
 {
 	Date date;
 	Point origin = {0, 0};
-	if (option == 0) {
-		exit (0);
-	}
-
-	date = getDate ();
 
 	switch (option) {
+		case 0:
+			printf ("Thanks for using this application\n");
+			exit (0);
 		case 1:
+			getYear (&date);
 			printYear (date);
 			break;
 		case 2:
+			getMonth (&date);
 			system ("clear");
 			printMonth (date, origin);
 			break;
 		case 3:
+			getDay (&date);
 			addNewEvent (date);
 			break;
 		default:
@@ -116,52 +109,74 @@ void handleMenu (int option)
 	}
 }
 
-Date getDate (void)
+void getYear (Date* datePtr)
 {
-	Date date = {0};
+	if (datePtr == NULL) {
+		return;
+	}
 
 	while (1) {
 		setColour (YELLOW);
+		
 		printf ("Enter the year\n");
-		scanf ("%lu", &date.year);
+		scanf ("%lu", &datePtr->year);
 		clearBuffer ();
-	
-		if (date.year >= 1600) {
-			break;
-		}
-		setColour (RED);
-		printf ("No Record Before 1600\n");
-	}
 
-	if (G_isRequired.month) {
-		while (1) {
-			setColour (YELLOW);
-			printf ("Enter the month\n");
-			scanf ("%hu", &date.month);
-			clearBuffer ();
-			if (date.month >= 1 && date.month <= 12) {
-				break;
-			}
+		if (datePtr->year < 1600) {
 			setColour (RED);
-			printf ("Invalid Month\n");
+			printf ("No record befor 1600\n");
+			continue;
 		}
-	}
-	
-	if (G_isRequired.day) {
-		while (1) {
-			setColour (YELLOW);
-			printf ("Enter the day\n");
-			scanf ("%hu", &date.day);
-			clearBuffer ();
-			if (date.day <= getDaysInMonth (date.month, date.year
-				|| date.day >= 1)) {
-				break;
-			}
-			setColour (RED);
-			printf ("Invalid Day");
-		}
+		break;
 	}
 	setColour (DEFAULT);
+}
 
-	return date;
+void getMonth (Date* datePtr)
+{
+	if (datePtr == NULL) {
+		return;
+	}
+
+	while (1) {
+		getYear (datePtr);
+
+		setColour (YELLOW);
+		printf ("Enter the Month\n"
+			"[January is 1]\n");
+		scanf ("%hu", &datePtr->month);
+		clearBuffer ();
+
+		if (datePtr->month > 12 || datePtr->month < 1) {
+			setColour (RED);
+			printf ("Invalid Month\n");
+			continue;
+		}
+		break;
+	}
+	setColour (DEFAULT);
+}
+
+void getDay (Date* datePtr)
+{
+	if (datePtr == NULL) {
+		return;
+	}
+
+	getMonth (datePtr);
+
+	while (1) {
+
+		setColour (YELLOW);
+		printf ("Enter the Day of the Month:\n");
+		scanf ("%hu", &datePtr->day);
+		clearBuffer ();
+
+		if (datePtr->day < 1 || datePtr->day > getDaysInMonth (datePtr->month, datePtr->year)) {
+			setColour (RED);
+			printf ("Invalid Day\n");
+			continue;
+		}
+		break;
+	}
 }
