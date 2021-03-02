@@ -11,16 +11,16 @@ void addNewEvent (Date date)
 {
 	Event tempEvent = {0};
 	Event input = {0};
-	int maxMessageLength = sizeof (input.message);
 	int charactersRead;
+	int maxMessageLength = sizeof (input.message);
 
 	FILE* eventFile = NULL;
 
-	if ((eventFile = fopen (EVENTS_PATH, "r+")) == NULL) {
+	if ((eventFile = fopen (EVENTS_PATH, "a+")) == NULL) {
 		setColour (RED);
-		printf ("Events.log file not found!\n");
+		printf ("Events.log: file not found, could not be created\n"
+			"Aborting operation\n");
 		setColour (DEFAULT);
-
 		return;
 	}
 
@@ -33,15 +33,16 @@ void addNewEvent (Date date)
 		setColour (DEFAULT);
 	}
 
-	while (fread (&tempEvent, sizeof (Event), 1, eventFile) != 0 
-		&& !dateIsLessThan (tempEvent.date, date))
-		;
+	while (fread (&tempEvent, sizeof (Event), 1, eventFile) != 0) {
+		if (dateIsLessThan (input.date, tempEvent.date)) {
+			break;
+		}
+	}
 
 	fwrite (&input, sizeof (input), 1, eventFile);
+	fclose (eventFile);
 
 	setColour (BLUE);
 	printf ("Successfully added log\n\n");
 	setColour (DEFAULT);
-
-	fclose (eventFile);
 }

@@ -77,7 +77,7 @@ void getOption (int * optionPtr)
 }
 
 //function: calls appropriate functions based on option
-//accepts : option chosen, date to calculate upon
+//accepts : option chosen
 //returns : void
 void handleMenu (int option)
 {
