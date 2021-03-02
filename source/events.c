@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include "utils.h"
 #include "date.h"
-#include "logs.h"
+#include "events.h"
 
 void addNewEvent (Date date)
 {
