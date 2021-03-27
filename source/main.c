@@ -8,17 +8,16 @@
 */
 #include <stdio.h>
 #include <stdlib.h>
-#include "events.h"
 #include "date.h"
 #include "utils.h"
 #include "outputs.h"
 
 void printMenu (void);
-void getOption (int *);
+int getOption (void);
 void handleMenu (int);
-void getYear (Date *);
-void getMonth (Date *);
-void getDay (Date *);
+unsigned long int getYear (void);
+unsigned short int getMonth (void);
+unsigned short int getDay (unsigned short int, unsigned long int);
 
 int main (int argc, char *argv[])
 {
@@ -26,15 +25,7 @@ int main (int argc, char *argv[])
 
 	while (1) {
 		printMenu ();
-		getOption (&option);
-		if (option < 0) {
-			setColour (RED);
-			printf ("Invalid Option\n");
-			setColour (DEFAULT);
-
-			continue;
-		}
-
+		option = getOption ();
 		handleMenu (option);
 	}
 	return 0;
@@ -49,31 +40,20 @@ void printMenu (void)
 	printf ("Enter:\n"
 		"  0 to exit\n"
 		"  1 to print a year's calendar\n"
-		"  2 to print a month's calendar\n"
-		"  3 to add a reminder (under development)\n");
+		"  2 to print a month's calendar\n" );
 	setColour (DEFAULT);
 }
 
 //function: gets a VALID option from the user
 //accepts : number of options the user gets
 //returns : integer b/w 0 and numOfOptions, -1 on invalid input
-void getOption (int * optionPtr)
+int getOption (void)
 {
-	if (optionPtr == NULL) {
-		return;
-	}
+	int option;
+	scanf ("%d", &option);
+	clearBuffer ();
 
-	while (1) {
-		scanf ("%d", optionPtr);
-		clearBuffer ();
-
-		if (*optionPtr < 0 || *optionPtr > 3) {
-			setColour (RED);
-			printf ("Invalid Option\n");
-			continue;
-		}
-		break;
-	}
+	return option;
 }
 
 //function: calls appropriate functions based on option
@@ -81,7 +61,7 @@ void getOption (int * optionPtr)
 //returns : void
 void handleMenu (int option)
 {
-	Date date;
+	Date date = {0};
 	Point origin = {0, 0};
 
 	switch (option) {
@@ -89,17 +69,15 @@ void handleMenu (int option)
 			printf ("Thanks for using this application\n");
 			exit (0);
 		case 1:
-			getYear (&date);
+			date.year = getYear ();
 			printYear (date);
 			break;
 		case 2:
-			getMonth (&date);
+			date.year = getYear ();
+			date.month = getMonth ();
+
 			system ("clear");
 			printMonth (date, origin);
-			break;
-		case 3:
-			getDay (&date);
-			addNewEvent (date);
 			break;
 		default:
 			setColour (RED);
@@ -109,20 +87,21 @@ void handleMenu (int option)
 	}
 }
 
-void getYear (Date* datePtr)
+//function: gets year from user
+//accepts : void
+//returns : year entered by user
+unsigned long int getYear (void)
 {
-	if (datePtr == NULL) {
-		return;
-	}
+	unsigned long int year;
 
 	while (1) {
 		setColour (YELLOW);
 		
 		printf ("Enter the year\n");
-		scanf ("%lu", &datePtr->year);
+		scanf ("%lu", &year);
 		clearBuffer ();
 
-		if (datePtr->year < 1600) {
+		if (year < 1600) {
 			setColour (RED);
 			printf ("No record befor 1600\n");
 			continue;
@@ -130,24 +109,24 @@ void getYear (Date* datePtr)
 		break;
 	}
 	setColour (DEFAULT);
+	return year;
 }
 
-void getMonth (Date* datePtr)
+//function: gets month from user
+//accepts : void
+//returns : month entered by user
+unsigned short int getMonth (void)
 {
-	if (datePtr == NULL) {
-		return;
-	}
+	unsigned short month;
 
 	while (1) {
-		getYear (datePtr);
-
 		setColour (YELLOW);
 		printf ("Enter the Month\n"
 			"[January is 1]\n");
-		scanf ("%hu", &datePtr->month);
+		scanf ("%hu", &month);
 		clearBuffer ();
 
-		if (datePtr->month > 12 || datePtr->month < 1) {
+		if (month > 12 || month < 1) {
 			setColour (RED);
 			printf ("Invalid Month\n");
 			continue;
@@ -155,28 +134,30 @@ void getMonth (Date* datePtr)
 		break;
 	}
 	setColour (DEFAULT);
+	return month;
 }
 
-void getDay (Date* datePtr)
+//function: gets year from user
+//accepts : void
+//returns : year value entered by user
+unsigned short int getDay (unsigned short int month, unsigned long int year)
 {
-	if (datePtr == NULL) {
-		return;
-	}
-
-	getMonth (datePtr);
+	unsigned short day;
 
 	while (1) {
 
 		setColour (YELLOW);
 		printf ("Enter the Day of the Month:\n");
-		scanf ("%hu", &datePtr->day);
+		scanf ("%hu", &day);
 		clearBuffer ();
 
-		if (datePtr->day < 1 || datePtr->day > getDaysInMonth (datePtr->month, datePtr->year)) {
+		if (day < 1 || day > getDaysInMonth (month, year)) {
 			setColour (RED);
 			printf ("Invalid Day\n");
 			continue;
 		}
 		break;
 	}
+	setColour (DEFAULT);
+	return day;
 }

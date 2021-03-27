@@ -81,14 +81,22 @@ char* getMonthName (int month)
 
 //function: checks if date1 comes before date2
 //accepts : first date and seconds date
-//returns : 1 if date1 is less or equal to date2, else 0
+//returns : 1 if date1 is less to date2, else 0
 int dateIsLessThan (Date date1, Date date2)
 {
-	if (date1.year <= date2.year) {
+	if (date1.year < date2.year ) {
 		return 1;
-	} else if (date1.month <= date2.month) {
+	} else if (date1.year > date2.year) {
+		return 0;
+	}
+
+	if (date1.month < date2.month) {
 		return 1;
-	} else if (date1.day <= date2.day) {
+	} else if (date1.month > date2.month) {
+		return 0;
+	}
+
+	if (date1.day < date2.day) {
 		return 1;
 	} else {
 		return 0;

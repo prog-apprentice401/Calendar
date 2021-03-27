@@ -29,6 +29,6 @@
 		int y;
 	} Point;
 
-	void clearBuffer (void);
 	void setColour (Colours);
+	void clearBuffer (void);
 #endif	//UTILS_H
