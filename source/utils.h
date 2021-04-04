@@ -25,8 +25,8 @@
 	} Colours;
 	
 	typedef struct {
-		int x;
-		int y;
+		int r;
+		int c;
 	} Point;
 
 	void setColour (Colours);

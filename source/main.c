@@ -37,7 +37,7 @@ int main (int argc, char *argv[])
 void printMenu (void)
 {
 	setColour (CYAN);
-	printf ("Enter:\n"
+	printf ("\nEnter:\n"
 		"  0 to exit\n"
 		"  1 to print a year's calendar\n"
 		"  2 to print a month's calendar\n" );
@@ -62,15 +62,16 @@ int getOption (void)
 void handleMenu (int option)
 {
 	Date date = {0};
-	Point origin = {0, 0};
+	Point origin = {1, 1};
 
 	switch (option) {
 		case 0:
+			setColour (YELLOW);
 			printf ("Thanks for using this application\n");
 			exit (0);
 		case 1:
 			date.year = getYear ();
-			printYear (date);
+			printYear (date.year);
 			break;
 		case 2:
 			date.year = getYear ();

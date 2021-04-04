@@ -12,7 +12,7 @@
 int getFirstDayOfMonth (Date date)
 {
 	int firstDay = 5;	//first Jan 1600 was Saturday
-	for (int i = 1600; i < date.year - date.year % 100; i+= 100) {	//first calculate day on first Jan of year
+	for (int i = 1600; i < date.year - date.year % 100; i+= 100) {	//calculate day on first Jan of year
 		if (ISLEAP (i)) {
 			firstDay += 6;
 		} else {
@@ -77,28 +77,4 @@ char* getMonthName (int month)
 		case 12: return "Dec";
 	}
 	return NULL;
-}
-
-//function: checks if date1 comes before date2
-//accepts : first date and seconds date
-//returns : 1 if date1 is less to date2, else 0
-int dateIsLessThan (Date date1, Date date2)
-{
-	if (date1.year < date2.year ) {
-		return 1;
-	} else if (date1.year > date2.year) {
-		return 0;
-	}
-
-	if (date1.month < date2.month) {
-		return 1;
-	} else if (date1.month > date2.month) {
-		return 0;
-	}
-
-	if (date1.day < date2.day) {
-		return 1;
-	} else {
-		return 0;
-	}
 }

@@ -10,17 +10,10 @@
 	typedef struct {
 		unsigned long int year;
 		unsigned short int month;
-		unsigned short int day;
 	} Date;
-
-	typedef struct {
-		_Bool month;
-		_Bool day;
-	} Requirements;
 	
 	int getFirstDayOfMonth (Date);
 	int getDaysInMonth (unsigned short int, unsigned long int);
 	char* getMonthName (int);
-	int dateIsLessThan (Date, Date);
 
 #endif	//DATE_FUNCTIONS_H

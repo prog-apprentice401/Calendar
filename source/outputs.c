@@ -14,8 +14,6 @@
 //returns : void
 void printMonth (Date date, const Point startOn)
 {
-	Point cursor = startOn;
-
 	int firstDay = getFirstDayOfMonth (date);
 	int daysInMonth = getDaysInMonth (date.month, date.year);
 	
@@ -23,18 +21,17 @@ void printMonth (Date date, const Point startOn)
 		return;
 	}
 
+	GOTORC (startOn.r, startOn.c);
 	setColour (BLUE);
 	printf ("       %s %4lu", getMonthName (date.month), date.year);
 	
 	CURSOR_DOWN (1);
-	cursor.x += 1;
 	CURSOR_LEFT (15);
 
 	setColour (RED);
 	printf ("  M  T  W  T  F  S  S");
 
 	CURSOR_DOWN (1);
-	cursor.x += 1;
 	CURSOR_LEFT (21);
 
 	setColour (DEFAULT);
@@ -42,41 +39,32 @@ void printMonth (Date date, const Point startOn)
 	for (int i = 0; i < firstDay; i++) {
 		printf ("   ");
 	}
-	for (unsigned char i = 1; i <= daysInMonth; i++) {
+	for (int i = 1; i <= daysInMonth; i++) {
 		printf ("%3d", i);
 		if ((i + firstDay) % 7 == 0) {
-			cursor.x += 1;
 			CURSOR_DOWN (1);
 			CURSOR_LEFT (21);
 		}
-	}
-	cursor.x += 1;
-	GOTORC (cursor.x, cursor.y);
-
-	if (cursor.x - startOn.x <= 9) {
-		cursor.x += 1;
-		GOTORC (cursor.x, cursor.y);
 	}
 }
 
 //function: prints a year's calander from top left of calendar
 //accepts : year
 //returns : void
-void printYear (Date date)
+void printYear (unsigned long int year)
 {
 	system ("clear");
-	
+	Date date = {year, 1};
 	Point cursor = {1, 1};
 	
-	for (date.month = 1; date.month <= 12; date.month++) {
+	for (; date.month <= 12; date.month++) {
 		printMonth (date, cursor);
-		cursor.y += 23;
-
-		GOTORC (cursor.x, cursor.y);
 
 		if (date.month % 4 == 0) {
-			cursor.x += 8;
-			GOTORC (cursor.x, cursor.y = 1);
+			cursor.r += 8;
+			cursor.c = 1;
+		} else {
+			cursor.c += 22;
 		}
 	}
 }

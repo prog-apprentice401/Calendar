@@ -9,5 +9,5 @@
 	#define OUTPUTS_H
 
 	void printMonth (Date, Point);
-	void printYear (Date);
+	void printYear (unsigned long int);
 #endif	//OUTPUTS_H
