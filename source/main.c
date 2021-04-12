@@ -11,6 +11,7 @@
 #include "date.h"
 #include "utils.h"
 #include "outputs.h"
+#include "inputs.h"
 
 void printMenu (void);
 int getOption (void);

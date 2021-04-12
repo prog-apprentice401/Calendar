@@ -1,0 +1,3 @@
+/*
+	Source file for all functions related to adding and removing Events
+*/
