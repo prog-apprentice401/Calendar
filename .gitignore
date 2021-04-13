@@ -1,4 +1,5 @@
 *.log
 .*.swp
 *.o
+source/Session.vim
 source/Calendar
