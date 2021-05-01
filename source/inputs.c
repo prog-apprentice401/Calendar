@@ -1,5 +1,5 @@
 /*
-	Source for functions to take inputs from user
+	Source file for all inputs of menu options, dates, or the likes.
 */
 #include <stdio.h>
 #include "utils.h"
@@ -69,7 +69,7 @@ unsigned short int getMonth (void)
 
 //function: gets year from user
 //accepts : void
-//returns : year value entered by user
+//returns : day entered by user
 unsigned short int getDay (unsigned short int month, unsigned long int year)
 {
 	unsigned short day;

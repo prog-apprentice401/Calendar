@@ -78,3 +78,21 @@ char* getMonthName (int month)
 	}
 	return NULL;
 }
+
+//function: compares two dates
+//accepts : two `Date` objects
+//returns : date1 < date2 : -ve int
+//          date1 == date2: 0
+//          date1 > date2 : +ve int
+long int compareDates (Date date1, Date date2)
+{
+	long int diff;
+
+	if ((diff = date1.year - date2.year) != 0) {
+		return diff;
+	} else if ((diff = date1.month - date2.month) != 0) {
+		return diff;
+	} else {
+		return date1.day - date2.day;
+	}
+}

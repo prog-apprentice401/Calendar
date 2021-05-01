@@ -1,5 +1,5 @@
 /*
-	Header file for functions required to take input from user
+	Header file for inputs.h source
 */
 
 #ifndef __INPUTS_H__
