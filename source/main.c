@@ -46,7 +46,8 @@ void printMenu (void)
 		"  1 to print a year's calendar\n"
 		"  2 to print a month's calendar\n"
 		"  3 to add an event\n"
-		"  4 to view events of a particular day\n");
+		"  4 to view events of a day\n"
+		"  5 to delete ALL events of a day [under development]\n");
 	setColour (DEFAULT);
 }
 
@@ -64,6 +65,7 @@ void handleMenu (int option)
 			setColour (YELLOW);
 			printf ("Thanks for using this application\n");
 			exit (0);
+			break;
 		case 1:
 			date.year = getYear ();
 			printYear (date.year);
@@ -92,7 +94,20 @@ void handleMenu (int option)
 			date.month = getMonth ();
 			date.day = getDay (date.month, date.year);
 
-			printEvents (date);
+			if (printEvents (date) == -1) {
+				printf ("No events on %hu/%hu/%lu\n", date.d);
+			}
+			break;
+		case 5:
+			/*
+			date.year = getYear ();
+			date.month = getMonth ();
+			date.day = getDay (date.month, date.year);
+
+			deleteEvents (Date);
+			*/
+			setColour (YELLOW);
+			printf ("feature under development, returning\n");
 			break;
 		default:
 			setColour (RED);

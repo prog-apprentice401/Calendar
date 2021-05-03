@@ -26,8 +26,9 @@ unsigned long int getYear (void)
 
 	while (1) {
 		setColour (YELLOW);
-		
 		printf ("Enter the year\n");
+		setColour (DEFAULT);
+
 		scanf ("%lu", &year);
 		clearBuffer ();
 

@@ -36,9 +36,7 @@ int addEvent (Event event)
 		printf ("error: addEvent(): could not open Events.log file");
 		return -1;
 	}
-
 	fwrite (&event, sizeof (Event), 1, eventsFile);
-
 	fclose (eventsFile);
 	return 0;
 }
@@ -52,6 +50,13 @@ int printEvents (Date date)
 	Event eventRead;
 	int eventSearchStatus = -1;
 
+	if (eventsFile == NULL) {
+		setColour (RED);
+		printf ("printevents: file Events.log not found, returning\n");
+		setColour (DEFAULT);
+
+		return eventSearchStatus;
+	}
 	while (fread (&eventRead, sizeof(Event), 1,
 		eventsFile) == 1) {
 		if (compareDates (eventRead.date, date) == 0) {
@@ -64,6 +69,5 @@ int printEvents (Date date)
 			printf ("\n");
 		}
 	}
-
 	return eventSearchStatus;
 }

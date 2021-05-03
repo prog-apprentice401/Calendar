@@ -23,4 +23,4 @@ clean:
 	rm *.o Calendar
 
 rmevents:
-	rm *.log
+	echo "" > Events.log
