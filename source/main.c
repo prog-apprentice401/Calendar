@@ -59,6 +59,7 @@ void handleMenu (int option)
 	Date date = {0};
 	Point origin = {1, 1};
 	Event event = {0};
+	int returnStatus;  //return status of any function called
 
 	switch (option) {
 		case 0:
@@ -81,10 +82,11 @@ void handleMenu (int option)
 			event.date.year = getYear ();
 			event.date.month = getMonth ();
 			event.date.day = getDay (event.date.month, event.date.year);
-
-			if (getEventMessage (event.message) != 0) {
+			
+			returnStatus = getEventMessage (event.message);
+			if (returnStatus != 0) {
 				setColour (RED);
-				printf ("All Characters may nat have been read\n");
+				printf ("All Characters may not have been read\n");
 				setColour (DEFAULT);
 			}
 			addEvent (event);
@@ -93,21 +95,36 @@ void handleMenu (int option)
 			date.year = getYear ();
 			date.month = getMonth ();
 			date.day = getDay (date.month, date.year);
-
-			if (printEvents (date) == -1) {
-				printf ("No events on %hu/%hu/%lu\n", date.d);
+			
+			returnStatus = printEvents (date);
+			setColour (RED);
+			if (returnStatus == 1) {
+				printf ("printEvents: no records on %hu/%hu/%lu\n",
+					date.day, date.month, date.year);
+			} else if (returnStatus == -1) {
+				printf ("printEvents: error opening Files `%s`;`%s`\n",
+					EVENTS_FILE_PATH, TEMP_EVENTS_FILE_PATH);
 			}
+			setColour (DEFAULT);
 			break;
 		case 5:
-			/*
 			date.year = getYear ();
 			date.month = getMonth ();
 			date.day = getDay (date.month, date.year);
 
-			deleteEvents (Date);
-			*/
+			returnStatus = deleteEvents (date);
+			setColour (RED);
+			if (returnStatus == 1) {
+				printf ("deleteEvents: no records for %hu/%hu/%lu\n",
+					date.day, date.month, date.year);
+			} else if (returnStatus == -1) {
+				printf ("deleteEvents: error opening files `%s`; `%s`\n",
+					EVENTS_FILE_PATH, TEMP_EVENTS_FILE_PATH);
+			}
+			/*
 			setColour (YELLOW);
 			printf ("feature under development, returning\n");
+			*/
 			break;
 		default:
 			setColour (RED);
