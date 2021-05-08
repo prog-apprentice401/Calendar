@@ -47,7 +47,8 @@ void printMenu (void)
 		"  2 to print a month's calendar\n"
 		"  3 to add an event\n"
 		"  4 to view events of a day\n"
-		"  5 to delete ALL events of a day [under development]\n");
+		"  5 to view ALL events of the Calendar\n"
+		"  6 to delete ALL events of a day\n");
 	setColour (DEFAULT);
 }
 
@@ -108,6 +109,16 @@ void handleMenu (int option)
 			setColour (DEFAULT);
 			break;
 		case 5:
+			returnStatus = printAllEvents ();
+			setColour (RED);
+			if (returnStatus == -1) {
+				printf ("printAllEvents: error opening File `%s`\n", EVENTS_FILE_PATH); 
+			} else if (returnStatus == 1) {
+				printf ("printAllEvents: no events found");
+			}
+			setColour (DEFAULT);
+			break;
+		case 6:
 			date.year = getYear ();
 			date.month = getMonth ();
 			date.day = getDay (date.month, date.year);

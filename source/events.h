@@ -18,5 +18,6 @@
 	int getEventMessage (char[]);
 	int addEvent (Event);
 	int printEvents (Date);
+	int printAllEvents (void);
 	int deleteEvents (Date);
 #endif //__EVENTS_H__

@@ -31,4 +31,5 @@
 
 	void setColour (Colours);
 	void clearBuffer (void);
+	void printMessage (char[]);
 #endif	//UTILS_H

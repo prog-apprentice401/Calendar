@@ -24,9 +24,9 @@ int getEventMessage (char message[])
 	return 0;
 }
 
-//function: prints all events on given day
+//function: prints events on given day
 //accepts : Date to check for Events
-//returns : 0:events found;1:no events found;-1:file error
+//returns : -1:file error; 0:success; 1:no events found
 int printEvents (Date date)
 {
 	FILE* eventsFile = fopen (EVENTS_FILE_PATH, "rb");
@@ -34,44 +34,70 @@ int printEvents (Date date)
 	int eventSearchStatus = 1;  //no events for date
 
 	if (eventsFile == NULL) {
-		return eventSearchStatus = -1;
+		return -1;  //file error
 	}
 	while (fread (&eventRead, sizeof(Event), 1, eventsFile) == 1) {
 		if (compareDates (eventRead.date, date) == 0) {
 			eventSearchStatus = 0;
-
-			setColour (CYAN);
-			printf ("Message: ");
-			setColour (DEFAULT);
-			printf ("%s", eventRead.message);
-			printf ("\n");
+			printMessage (eventRead.message);
 		}
 	}
 	return eventSearchStatus;
 }
 
+//function: prints all events added to the Calendar
+//accepts : void
+//returns : -1:file error; 0:success; 1:no events found
+int printAllEvents (void)
+{
+	FILE* eventsFile = fopen (EVENTS_FILE_PATH, "rb");
+	Event eventRead = {0};
+	Date dateLastPrinted = {1}; //must differ
+
+	int eventSearchStatus = 1;  //events not found
+	
+	if (eventsFile == NULL) {
+		return -1;  //file error
+	}
+	while (fread (&eventRead, sizeof (Event), 1, eventsFile) == 1) {
+		eventSearchStatus = 0;  //success
+		if (compareDates (eventRead.date, dateLastPrinted) != 0) {
+			printf ("\nDate: %hu/%hu/%lu\n"
+				"---------\n",
+				eventRead.date.day, eventRead.date.month, eventRead.date.year);
+			dateLastPrinted = eventRead.date;
+		}
+		printMessage (eventRead.message);
+	}
+
+	return eventSearchStatus;
+}
+
 //function: adds Event to Events.log file
 //accepts : Event to add
-//returns : 0:success;1:faliure;-1:file error
+//returns : -1:file error; 0:success; 1:no events found
 int addEvent (Event eventToAdd)
 {
-	FILE* eventsFile = fopen (EVENTS_FILE_PATH, "r+b");
+	FILE* eventsFile = fopen (EVENTS_FILE_PATH, "ri+b");
 	FILE* tempEventsFile = fopen (TEMP_EVENTS_FILE_PATH, "wb");
-	Event eventRead;
+	Event eventRead = {0};
 	int eventAddStatus = 1; //faliure adding event
 
 	if (eventsFile == NULL || tempEventsFile == NULL) {
-		return eventAddStatus = -1;  //file error
+		return -1;  //file error
 	}
 	while (fread (&eventRead, sizeof (Event), 1, eventsFile) == 1) {
-		fwrite (&eventRead, sizeof (Event), 1, tempEventsFile);
-
 		//adds event in ascending order
-		if (compareDates (eventRead.date, eventToAdd.date) >= 0) {
+		if (compareDates (eventRead.date, eventToAdd.date) > 0) {
 			fwrite (&eventToAdd, sizeof (Event), 1, tempEventsFile);
 			eventAddStatus = 0;  //success
 		}
+		fwrite (&eventRead, sizeof (Event), 1, tempEventsFile);
 	}
+	if (eventAddStatus != 0) {  //couldn't find position
+		fwrite (&eventToAdd, sizeof (Event), 1, tempEventsFile);
+	}
+
 	fclose (eventsFile);
 	fclose (tempEventsFile);
 
@@ -83,20 +109,19 @@ int addEvent (Event eventToAdd)
 
 //function: deletes ALL events on a particular day
 //accepts : Date object to delete
-//returns : 0:events found;1:no events found;-1:file error
+//returns : -1:file error; 0:success; 1:no events found
 int deleteEvents (Date date)
 {
 	FILE* eventsFile = fopen (EVENTS_FILE_PATH, "rb");
 	FILE* tempEventsFile = fopen (TEMP_EVENTS_FILE_PATH, "w+");
+	Event eventRead = {0};
 	int deletionStatus = 1;
-	Event eventRead;
 
 	if (eventsFile == NULL || tempEventsFile == NULL) {
-		return deletionStatus = -1;	//file error
+		return -1;  //file error
 	}
-	while (fread (&eventRead, sizeof (Event), 1,
-		eventsFile) == 1) {
-		if (compareDates (date, eventRead.date) != 0) {
+	while (fread (&eventRead, sizeof (Event), 1, eventsFile) == 1) {
+		if (compareDates (date, eventRead.date) == 0) {
 			fwrite (&eventRead, sizeof (Event), 1, tempEventsFile);
 		} else {  //this record is not in new file
 			deletionStatus = 0;

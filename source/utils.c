@@ -22,3 +22,14 @@ void clearBuffer (void)
 	while ((dump = getchar ()) != '\n' && dump != EOF)
 		;
 }
+
+//function: prints a message with proper colours
+//accepts : pointer to message string
+//returns : void
+void printMessage (char message[])
+{
+	setColour (CYAN);
+	printf ("Message: ");
+	setColour (DEFAULT);
+	printf ("%s\n", message);
+}
