@@ -4,6 +4,9 @@ COMPILE_FILES=main.o date.o utils.o outputs.o inputs.o events.o
 all: $(COMPILE_FILES)
 	gcc $(CFLAGS) $(COMPILE_FILES) -o Calendar
 
+main.o: main.c
+	gcc $(CFLAGS) -c main.c
+
 inputs.o: inputs.c inputs.h
 	gcc $(CFLAGS) -c inputs.c
 
